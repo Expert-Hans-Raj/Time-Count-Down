@@ -1,0 +1,239 @@
+{% if section.settings.enabled != blank %}
+
+ <a class="link_" href="{{ section.settings.link }}">
+<div class="count-doown">
+  <div id="clockdiv">
+  {% if section.settings.text_left != blank %}
+
+    <h3 class="countdown-banner__heading">{{ section.settings.text_left }}</h3>
+  {% endif %}
+  <div>
+    <span class="days"></span>
+    <div class="smalltext">{{ section.settings.timer_days_label }}</div>
+  </div><span class="countdown-banner__divider">:</span>
+  <div>
+    <span class="hours"></span>
+    <div class="smalltext">{{ section.settings.timer_hours_label }}</div>
+  </div><span class="countdown-banner__divider">:</span>
+  <div>
+    <span class="minutes"></span>
+    <div class="smalltext">{{ section.settings.timer_minutes_label }}</div>
+  </div><span class="countdown-banner__divider">:</span>
+    
+  <div>
+    <span class="seconds"></span>
+    <div class="smalltext">Seconds</div>
+  </div> 
+    
+ {% if section.settings.text_right != blank %}
+
+    <h3 class="countdown-banner__heading">{{ section.settings.text_right }}</h3>
+  {% endif %}
+      
+</div>
+  <div class="bottom">
+    <a class="image-with-text-overlay-block--link" href="{{ section.settings.link }}"> {% if section.settings.bottom_text1 != blank %} <strong>{{ section.settings.bottom_text1 }}</strong> {% endif %}  <p class="_text_"> {{ section.settings.bottom_text2 }} </p> {% if section.settings.bottom_text3 %}<strong>{{ section.settings.bottom_text3 }}</strong>{% endif %}</a>
+  </div>
+   </div> </a>
+{% endif %}
+    {% schema %}
+    {
+    "name": "Count Down Timer",
+    "class": "count_timer",
+    "settings": [
+    {
+    "type": "checkbox",
+    "id": "enabled",
+    "default": false,
+    "label": "Enable announcement bar"
+    },
+    {
+    "type": "textarea",
+    "id": "text_left",
+    "default": "FINAL HOUR 40% SALE ON EVERYTHING!",
+    "label": "Left Side text"
+    },
+{
+    "type": "textarea",
+    "id": "text_right",
+    "default": "FINAL HOUR 40% SALE ON EVERYTHING!",
+    "label": "Right Side Text"
+    },
+    {
+    "type": "color",
+    "id": "background_color",
+    "label": "Background color",
+    "default": "#d62020"
+    },
+    {
+    "type": "color",
+    "id": "text_color",
+    "label": "Text color",
+    "default": "#ffffff"
+    },
+ {
+    "type": "color",
+    "id": "mainbackground_color",
+    "label": "Whole Section Background color",
+    "default": "#d62020"
+    },
+    {
+    "type": "text",
+    "id": "timer_date",
+    "label": "Expiration date",
+    "info": "Format: YYYY-MM-DD"
+    },
+    {
+    "type": "text",
+    "id": "timer_days_label",
+    "label": "Days label",
+    "default": "Days"
+    },
+    {
+    "type": "text",
+    "id": "timer_hours_label",
+    "label": "Hours label",
+    "default": "Hours"
+    },
+    {
+    "type": "text",
+    "id": "timer_minutes_label",
+    "label": "Minutes label",
+    "default": "Minutes"
+    },
+ {
+    "type": "color",
+    "id": "text_color_timer",
+    "label": "Count Down Text color",
+    "default": "#ffffff"
+    },
+    {
+    "type": "text",
+    "id": "timer_seconds_label",
+    "label": "Seconds label",
+    "default": "Seconds"
+    },
+ {
+    "type": "textarea",
+    "id": "bottom_text1",
+    "default": "SALE",
+    "label": "SALE TEXT"
+    },
+ {
+    "type": "textarea",
+    "id": "bottom_text2",
+    "default": "40% OFF ON EVERYTHING!",
+    "label": "Left Side text"
+    },
+ {
+    "type": "textarea",
+    "id": "bottom_text3",
+    "default": "SALE",
+    "label": "SALE TEXT"
+    },
+{
+    "type": "url",
+    "id": "link",
+    "label": "Call To ACtion"
+    }
+    ],
+    "presets":[
+    {
+    "name":"Count-Down",
+    "category":"Count-Down"
+    }
+    ]
+    }
+    {% endschema %}
+
+<style>
+  span, .days,.hours,.minutes,.seconds{
+  color: {{ section.settings.text_color_timer }};
+  }
+  
+  .count-doown{
+  background: {{ section.settings.mainbackground_color }};
+  }
+h1{
+  color: #396;
+  font-weight: 100;
+  font-size: 40px;
+  margin: 40px 0px 20px;
+}
+
+#clockdiv a p{
+  font-family: sans-serif;
+  color: {{ section.settings.text_color }};
+  display: inline-block;
+  font-weight: 100;
+  text-align: center;
+  font-size: 30px;
+}
+
+#clockdiv > div{
+  padding: 10px;
+  border-radius: 3px;
+  background: {{ section.settings.background_color }};
+  display: inline-block;
+}
+
+
+
+.smalltext{
+  padding-top: 5px;
+  font-size: 16px;
+}
+</style>
+<script>
+  /*  Time Count-Down-js */
+function getTimeRemaining(endtime) {
+  const total = Date.parse(endtime) - Date.parse(new Date());
+  const seconds = Math.floor((total / 1000) % 60);
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+  const days = Math.floor(total / (1000 * 60 * 60 * 24));
+  
+  return {
+    total,
+    days,
+    hours,
+    minutes,
+    seconds
+  };
+}
+
+function initializeClock(id, endtime) {
+  const clock = document.getElementById(id);
+  const daysSpan = clock.querySelector('.days');
+  const hoursSpan = clock.querySelector('.hours');
+  const minutesSpan = clock.querySelector('.minutes');
+  const secondsSpan = clock.querySelector('.seconds');
+
+  function updateClock() {
+    const t = getTimeRemaining(endtime);
+
+    daysSpan.innerHTML = t.days;
+    hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+    minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+    secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+    if (t.total <= 0) {
+      clearInterval(timeinterval);
+    }
+  }
+
+  updateClock();
+  const timeinterval = setInterval(updateClock, 1000);
+}
+
+  {% if section.settings.timer_date != blank %}
+  const deadline = '{{ section.settings.timer_date }}';
+  {% else %}
+  const deadline = new Date(Date.parse(new Date()) + 15 * 24 * 60 * 60 * 1000);
+  {% endif %}
+
+initializeClock('clockdiv', deadline);
+
+
+/*  Time Count-Down-js */
+</script>
