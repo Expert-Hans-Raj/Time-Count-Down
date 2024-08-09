@@ -1,0 +1,144 @@
+{% comment %} Counter Script Start{% endcomment %}
+
+<div id="countdown-wrap" class="container">
+  <h1 id="headline">Hurry Up Discount is end soon</h1>
+  <div id="countdown">
+    <ul class="counter-dates">
+      <li class="days"><span id="days"></span>days</li>
+      <li class="hours"><span id="hours"></span>Hours</li>
+      <li class="minutes"><span id="minutes"></span>Minutes</li>
+      <li class="seconds"><span id="seconds"></span>Seconds</li>
+    </ul>
+  </div>
+</div>
+<input type="hidden" id="smonth" class="smonth" value="{{ section.settings.smonth }}">
+<input type="hidden" id="sdate" class="sdate" value="{{ section.settings.sdate }}">
+<input type="hidden" id="syear" class="syear" value="{{ section.settings.syear }}">
+<input type="hidden" id="emonth" class="emonth" value="{{ section.settings.emonth }}">
+<input type="hidden" id="edate" class="edate" value="{{ section.settings.edate }}">
+<input type="hidden" id="eyear" class="eyear" value="{{ section.settings.eyear }}">
+{% assign smonth = section.settings.smonth %}
+{% comment %} Counter Script End{% endcomment %}
+{% schema %}
+{
+  "name": "Count-Down-ForSpecif-Pro",
+  "settings": [ {
+      "type":"header",
+      "content":"Counter Count Down Start Date"
+    },
+    {
+          "type": "text",
+          "id": "smonth",
+          "label": "Month"
+        },
+    {
+          "type": "text",
+          "id": "sdate",
+          "label": "Date"
+        },
+    {
+          "type": "text",
+          "id": "syear",
+          "label": "Year"
+        },
+     {
+      "type":"header",
+      "content":"Counter Count Down End Date"
+    },
+    {
+          "type": "text",
+          "id": "emonth",
+          "label": "Month"
+        },
+    {
+          "type": "text",
+          "id": "edate",
+          "label": "Date"
+        },
+    {
+          "type": "text",
+          "id": "eyear",
+          "label": "Year"
+        }]
+}
+{% endschema %}
+<script>
+        (function () {
+            var smonth = document.getElementById('smonth').value;
+            var sdate = document.getElementById('sdate').value;
+            var syear = document.getElementById('syear').value;
+            var emonth = document.getElementById('emonth').value;
+            var edate = document.getElementById('edate').value;
+            var eyear = document.getElementById('eyear').value;
+
+            const second = 1000,
+                  minute = second * 60,
+                  hour = minute * 60,
+                  day = hour * 24;
+
+            let endDate = new Date(`${eyear}-${emonth}-${edate}`);
+
+            console.log("End Date: " + endDate);
+
+            const countDown = endDate.getTime(),
+                  x = setInterval(function() {
+
+                const now = new Date().getTime(),
+                      distance = countDown - now;
+
+                if (distance > 0) {
+                    document.getElementById("days").innerText = Math.floor(distance / day);
+                    document.getElementById("hours").innerText = Math.floor((distance % day) / hour);
+                    document.getElementById("minutes").innerText = Math.floor((distance % hour) / minute);
+                    document.getElementById("seconds").innerText = Math.floor((distance % minute) / second);
+                } else {
+                    clearInterval(x);
+                    // Show "Discount is end" message
+                    document.getElementById("countdown-wrap").style.display = "none";
+                   document.getElementById("countdown").style.display = "none";
+                }
+            }, 1000);
+        }());
+</script>
+<style>
+  #countdown ul.counter-dates {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      grid-gap: 40px;
+      margin-bottom: 20px;
+  }
+  #countdown ul.counter-dates li {
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      font-family: Poppins,sans-serif;
+      text-transform: uppercase;
+      flex-direction: column;
+      width: 120px;
+      background: #e37143;
+      border-radius: 5px;
+      color: #ffffff;
+      padding: 15px 10px 10px 10px;
+      height: 100px;
+      align-items: center;
+  }
+
+  #countdown ul.counter-dates li span {
+      font-size: 40px;
+      font-family: BD Supper!important;
+      font-weight: 900;
+      line-height: 40px;
+      /* padding: 10px; */
+  }
+
+  h1#headline {
+      font-family: BD Supper!important;
+      text-align: center;
+      text-transform: uppercase;
+      font-weight: 900;
+      font-size: 40px;
+  }
+</style>
